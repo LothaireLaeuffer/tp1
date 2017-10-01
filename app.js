@@ -1,6 +1,6 @@
 console.log("It works !! ");
 
-var CONFIG = require("./config.json");
+var CONFIG = require("./configMAC.json");
 process.env.CONFIG = JSON.stringify(CONFIG);
 
 var express = require("express");
@@ -57,6 +57,7 @@ app.get("/loadPres", function(request, response) {
 
 		var extFile = "json";
 		// TODO verifier extension
+		//var jsonfiles = files.
 
 	
 		var compteur=0;
@@ -82,6 +83,51 @@ app.get("/loadPres", function(request, response) {
 		});
 	});
 });
+
+
+app.get("/savePres", function(request, response){
+
+	//TODO recuperatoin des données
+	//var data={"couocu": "blalbla"};
+	var data = 'efzefzefqsdfzqefa';
+	//data = JSON.parse(data);
+
+	console.log(data);
+
+	var fileName = "coucou" + ".pres.json";
+
+	fs.writeFile(CONFIG.presentationDirectory+"/"+fileName, data, 'utf8', function (err){
+		if(!!err)
+		{
+			console.error(err);
+			return;
+		}
+	});
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
