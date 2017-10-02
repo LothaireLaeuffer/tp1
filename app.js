@@ -81,6 +81,7 @@ app.get("/loadPres", function(request, response) {
 	});
 });
 
+//mettre la fonction dans app.get ??
 function filterJson(files)
 {
 
@@ -105,6 +106,7 @@ app.get("/savePres2", function(request, response){
 				console.error(err);
 				return;
 			}
+			console.log("File saved bis"); 
 		});
 	})
 
@@ -126,7 +128,7 @@ app.post("/savePres", function(request, response){
 				console.error(err);
 				return;
 			}
-			console.log("file saved");
+			console.log("File saved");
 		});
 	})
 

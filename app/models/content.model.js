@@ -100,7 +100,7 @@ ContentModel.read = function(id, callback){
 }
 
 ContentModel.update = function(content, callback){
-console.log("eeeee");
+console.log("update");
 console.log(content);
 	if (content.getData() <= 0)
 	{
@@ -108,7 +108,7 @@ console.log(content);
 		return;
 	}
 
-	//create(content, callback);
+
 
 	var check_content = false;
 	var check_metadata = false;
