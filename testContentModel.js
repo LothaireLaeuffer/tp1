@@ -1,6 +1,6 @@
 'use strict';
 
-var CONFIG = require("./config.json");
+var CONFIG = require("./configMac.json");
 process.env.CONFIG = JSON.stringify(CONFIG);
 
 var utils = require("./app/utils/utils.js");

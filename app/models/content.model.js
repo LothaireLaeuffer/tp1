@@ -1,8 +1,15 @@
+"use strict";
+
+
+var fs= require('fs');
+var CONFIG = require("../../configMac.json");
 
 
 
 
 var ContentModel = function (model){
+
+	model= check(model);
 
 	//public
 	this.type = model.type;
@@ -12,7 +19,7 @@ var ContentModel = function (model){
 	this.fileName = model.fileName;
 
 	//private
-	var data = model .data;
+	var data = model.data;
 
 
 	this.getData = function(){
@@ -22,79 +29,175 @@ var ContentModel = function (model){
 	this.setData = function(data){
 		this.data = data;
 	}
+
+
+	function check(model){
+		if(typeof model === "undefined")
+		{
+			model={type: null, id: null, title: null, filename: null, data: null};
+		}
+		return model;
+	}
+
 }
 
 
 ContentModel.create =  function(content, callback){
 
-		fs.writeFile(CONFIG.contentDirectory+"/"+content.fileNAme, content.data, 'utf8', function (err){
-			if(!!err)
-			{
-				console.error(err);
-				return;
-			}
-		});
+	var check_content = false;
+	var check_metadata = false;
+
+	fs.writeFile(CONFIG.contentDirectory+"/"+content.fileName, content.getData(), 'utf8', function (err){
+		if(!!err)
+		{
+			console.error(err);
+			return;
+		}
+		
+		console.log("file content created");
+		check_content= true;
+
+		if (check_content && check_metadata)
+		{
+			callback(err);
+		}
+	});
+
+	fs.writeFile(CONFIG.contentDirectory+"/"+content.id+".meta.json", JSON.stringify(content), 'utf8', function (err){
+		if(!!err)
+		{
+			console.error(err);
+			return;
+		}
+
+		console.log("file meta data created");
+		check_metadata=true;
+
+		if (check_content && check_metadata)
+		{
+			callback(err);
+		}
+	});
 
 
-		fs.writeFile(CONFIG.contentDirectory+"/"+content.id+".meta.json", METADONNE, 'utf8', function (err){
-			if(!!err)
-			{
-				console.error(err);
-				return;
-			}
-		});
-	}
+
+}
 
 
 ContentModel.read = function(id, callback){
 
-		fs.readFile(id+".meta.json", function(err, file){
-			
-			if (!!err)
-			{
-				console.error(err);
-				return;
-			}
+	fs.readFile(CONFIG.contentDirectory+"/"+id+".meta.json", function(err, file){
+		
+		if (!!err)
+		{
+			console.error(err);
+			return;
+		}
 
-			return file;
+		callback(err, file);
 
-		});
-	}
+	});
+}
 
 ContentModel.update = function(content, callback){
-
+console.log("eeeee");
+console.log(content);
+	if (content.getData() <= 0)
+	{
+		console.log("Error : no data");
+		return;
 	}
+
+	//create(content, callback);
+
+	var check_content = false;
+	var check_metadata = false;
+
+	fs.writeFile(CONFIG.contentDirectory+"/"+content.fileName, content.getData(), 'utf8', function (err){
+		if(!!err)
+		{
+			console.error(err);
+			return;
+		}
+		
+		console.log("file content created");
+		check_content= true;
+
+		if (check_content && check_metadata)
+		{
+//			callback(err);
+		}
+	});
+
+	fs.writeFile(CONFIG.contentDirectory+"/"+content.id+".meta.json", JSON.stringify(content), 'utf8', function (err){
+		if(!!err)
+		{
+			console.error(err);
+			return;
+		}
+
+		console.log("file meta data created");
+		check_metadata=true;
+
+		if (check_content && check_metadata)
+		{
+//			callback(err);
+		}
+	});
+	console.log("je suis la ");
+
+}
 
 ContentModel.delete = function (id, callback){
 
-		fs.unlink(id+".meta.json", function (err){
-			if (!!err)
-			{
-				console.error(err);
-				return;
-			}
-		});
+	console.log("delete function param : id = " +  id);
 
-		fs.unlink(id+".pres.json", function (err){
-			if (!!err)
-			{
-				console.error(err);
-				return;
-			}
-		});
-	}
+	var check_content = false;
+	var check_metadata = false;
+
+	fs.unlink(id+".meta.json", function (err){
+		if (!!err)
+		{
+			console.error(err);
+			return;
+		}
+
+		check_content = true;
+		if (check_content && check_metadata)
+		{
+//			callback(err);
+		}
+
+	});
+
+	fs.unlink(id+".pres.json", function (err){
+		if (!!err)
+		{
+			console.error(err);
+			return;
+		}
+
+		check_content = true;
+		if (check_content && check_metadata)
+		{
+//			callback(err);
+		}
+
+	});
+
+}
 
 
-/*
-	constructor( aaaaaa){
-		this.type = aaaaaa.type;
-		this.id = aaaaaa.id;
-		this.title = aaaaaa.title;
-		this.src = aaaaaa.src;
-		this.fileName = aaaaaa.fileName;
-		this.data = aaaaaa.data;
-	}
-*/
+
+function ContentModel( aaaaaa){
+	this.type = aaaaaa.type;
+	this.id = aaaaaa.id;
+	this.title = aaaaaa.title;
+	this.src = aaaaaa.src;
+	this.fileName = aaaaaa.fileName;
+	this.data = aaaaaa.data;
+}
+
 
 
 

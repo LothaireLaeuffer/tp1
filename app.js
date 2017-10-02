@@ -1,3 +1,5 @@
+"use strict";
+
 console.log("It works !! ");
 
 var CONFIG = require("./configMAC.json");
@@ -9,8 +11,6 @@ var path = require("path");
 var fs = require("fs");
 
 var defaultRoute = require("./app/routes/default.route.js");
-
-
 
 
 //init server
@@ -55,11 +55,9 @@ app.get("/loadPres", function(request, response) {
 			return;
 		}
 
-		var extFile = "json";
-		// TODO verifier extension
-		//var jsonfiles = files.
 
-	
+		files= files.filter(filterJson);
+
 		var compteur=0;
 
 		files.forEach(function(fileName){
@@ -73,7 +71,6 @@ app.get("/loadPres", function(request, response) {
 
 				returnData[id] = jsonData;
 
-
 				if (files.length == compteur)
 				{
 					response.send(returnData);
@@ -84,32 +81,57 @@ app.get("/loadPres", function(request, response) {
 	});
 });
 
+function filterJson(files)
+{
 
-app.get("/savePres", function(request, response){
+	if(path.extname(files)=='.json')
+	{
+		return files;
+	}
+	
+}
 
-	//TODO recuperatoin des données
-	//var data={"couocu": "blalbla"};
-	var data = 'efzefzefqsdfzqefa';
-	//data = JSON.parse(data);
 
-	console.log(data);
+app.get("/savePres2", function(request, response){
 
-	var fileName = "coucou" + ".pres.json";
+	request.on('data', function(data){
 
-	fs.writeFile(CONFIG.presentationDirectory+"/"+fileName, data, 'utf8', function (err){
-		if(!!err)
-		{
-			console.error(err);
-			return;
-		}
-	});
+		data = JSON.parse(data);
+		var fileName = data.id + ".pres.json";
+
+		fs.writeFile(CONFIG.presentationDirectory+"/"+fileName, data, 'utf8', function (err){
+			if(!!err)
+			{
+				console.error(err);
+				return;
+			}
+		});
+	})
 
 });
 
 
 
 
+app.post("/savePres", function(request, response){
 
+	request.on('data', function(data){
+		data = JSON.parse(data);
+
+		var fileName = data.id + ".pres.json";
+
+		fs.writeFile(CONFIG.presentationDirectory+"/"+fileName, JSON.stringify(data), 'utf8', function (err){
+			if(!!err)
+			{
+				console.error(err);
+				return;
+			}
+			console.log("file saved");
+		});
+	})
+
+
+});
 
 
 
