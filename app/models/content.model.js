@@ -47,6 +47,7 @@ ContentModel.create =  function(content, callback){
 	var check_content = false;
 	var check_metadata = false;
 
+	//enregistre content.data
 	fs.writeFile(CONFIG.contentDirectory+"/"+content.fileName, content.getData(), 'utf8', function (err){
 		if(!!err)
 		{
@@ -63,6 +64,7 @@ ContentModel.create =  function(content, callback){
 		}
 	});
 
+	//enregitre les meta-données
 	fs.writeFile(CONFIG.contentDirectory+"/"+content.id+".meta.json", JSON.stringify(content), 'utf8', function (err){
 		if(!!err)
 		{
@@ -79,9 +81,8 @@ ContentModel.create =  function(content, callback){
 		}
 	});
 
-
-
 }
+
 
 
 ContentModel.read = function(id, callback){
@@ -98,6 +99,7 @@ ContentModel.read = function(id, callback){
 
 	});
 }
+
 
 ContentModel.update = function(content, callback){
 console.log("update");
@@ -155,6 +157,7 @@ ContentModel.delete = function (id, callback){
 	var check_content = false;
 	var check_metadata = false;
 
+//chemin faux ??
 	fs.unlink(id+".meta.json", function (err){
 		if (!!err)
 		{
